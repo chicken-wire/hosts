@@ -17,6 +17,10 @@ pub fn read(path: &str) -> Vec<Host> {
     let mut hosts: Vec<Host> = vec![];
 
     for line in file.lines() {
+        if line.contains("#") || line.is_empty() {
+            continue;
+        }
+
         let values: Vec<String> = line.split_whitespace().map(|v| v.to_string()).collect();
         hosts.push(Host::new(
             &values[0],
