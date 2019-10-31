@@ -10,9 +10,9 @@ use std::fs;
 /// // ::1		localhost
 /// // 127.0.1.1	test.localdomain test
 ///
-/// assert_eq!(hosts::parse("tests/hosts").len(), 3)
+/// assert_eq!(hosts::read("tests/hosts").len(), 3)
 /// ```
-pub fn parse(path: &str) -> Vec<Host> {
+pub fn read(path: &str) -> Vec<Host> {
     let file = fs::read_to_string(path).expect("File not found");
     let mut hosts: Vec<Host> = vec![];
 

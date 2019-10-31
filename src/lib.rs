@@ -6,4 +6,4 @@ pub mod host;
 pub mod parser;
 
 pub use host::Host;
-pub use parser::parse;
+pub use parser::read;
