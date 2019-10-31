@@ -22,7 +22,6 @@ pub fn read(path: &str) -> Vec<Host> {
             &values[0],
             &values[1],
             // Check to see if any aliases exist then handle appropriately.
-            // FIXME: don't repeat yourself!
             match &values[2..] {
                 [] => None,
                 _ => Some(Vec::from(&values[2..])),

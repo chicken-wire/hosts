@@ -3,7 +3,7 @@ extern crate hosts;
 use hosts::{read, Host};
 
 #[test]
-fn test_parser() {
+fn test_read() {
     assert_eq!(read("tests/hosts").len(), 3);
     assert_eq!(
         read("tests/hosts")[0],
