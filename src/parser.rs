@@ -30,3 +30,24 @@ pub fn read(path: &str) -> Vec<Host> {
     }
     return hosts;
 }
+
+/// Writes hosts to a hosts file.
+///
+/// # Example
+/// ```
+/// let hosts  = vec!(hosts::Host::new("127.0.0.1", "localhost", None));
+/// hosts::write("tests/test_hosts", hosts);
+///
+/// assert_eq!(hosts::read("tests/test_hosts")[0], hosts::Host::new("127.0.0.1", "localhost", None));
+///
+/// std::fs::remove_file("tests/test_hosts");
+/// ```
+pub fn write(path: &str, hosts: Vec<Host>) {
+    let mut hosts_file = String::new();
+
+    for host in hosts {
+        hosts_file.push_str(&format!("{}\n", host))
+    }
+
+    fs::write(path, hosts_file).expect("Invalid path");
+}

@@ -1,6 +1,7 @@
 extern crate hosts;
 
-use hosts::{read, Host};
+use hosts::{read, write, Host};
+use std::fs;
 
 #[test]
 fn test_read() {
@@ -17,4 +18,16 @@ fn test_read() {
             Some(vec!("test".to_string()))
         )
     );
+}
+
+#[test]
+fn test_write() {
+    write("tests/test_hosts", read("tests/hosts"));
+
+    let hosts = read("tests/hosts");
+    for (i, host) in hosts.iter().enumerate() {
+        assert_eq!(&read("tests/test_hosts")[i], host)
+    }
+
+    fs::remove_file("tests/test_hosts").unwrap();
 }
