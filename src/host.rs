@@ -3,9 +3,9 @@ use std::net::IpAddr;
 
 #[derive(Debug, PartialEq)]
 pub struct Host {
-    ip: IpAddr,
-    fqdn: String,
-    aliases: Option<Vec<String>>,
+    pub ip: IpAddr,
+    pub fqdn: String,
+    pub aliases: Option<Vec<String>>,
 }
 
 impl Host {
