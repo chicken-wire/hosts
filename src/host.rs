@@ -19,6 +19,7 @@ impl Host {
 }
 
 impl fmt::Display for Host {
+    /// Formats the host to comply with the hosts file standard.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut aliases = String::new();
 
