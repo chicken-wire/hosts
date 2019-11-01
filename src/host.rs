@@ -18,13 +18,8 @@ impl Host {
     }
 }
 
-impl From<&str> for Host {
-    /// Creates a Host from a hosts line
-    /// # Example
-    /// ```
-    /// hosts::Host::from("127.0.0.1 localhost");
-    /// ```
-    fn from(s: &str) -> Host {
+impl From<String> for Host {
+    fn from(s: String) -> Host {
         let values: Vec<&str> = s.split_whitespace().collect();
         Host::new(
             &values.get(0).expect("IP not found"),
@@ -35,6 +30,12 @@ impl From<&str> for Host {
                 _ => None,
             }
         )
+    }
+}
+
+impl From <&str> for Host {
+    fn from(s: &str) -> Host {
+        Host::from(s.to_string())
     }
 }
 
