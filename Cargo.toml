@@ -1,6 +1,6 @@
 [package]
 name = "hosts"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["Hayden Hughes <hayden@vulpes.chickenkiller.com>"]
 edition = "2018"
 description = "hosts file parsing for rust"
