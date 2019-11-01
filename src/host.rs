@@ -1,7 +1,7 @@
 use std::fmt;
 use std::net::IpAddr;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Host {
     pub ip: IpAddr,
     pub fqdn: String,
