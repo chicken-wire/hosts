@@ -39,9 +39,16 @@ impl From<&str> for HostsFile {
     }
 }
 
-impl HostsFile {
-    pub fn new(hosts: Vec<Host>) -> HostsFile {
+impl From<Vec<Host>> for HostsFile {
+    fn from(hosts: Vec<Host>) -> HostsFile {
         HostsFile { hosts }
+    }
+}
+
+impl HostsFile {
+    /// Create empty HostsFile
+    pub fn new() -> HostsFile {
+        HostsFile { hosts: Vec::new() }
     }
 
     pub fn from_file(path: &str) -> HostsFile {
