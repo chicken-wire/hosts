@@ -33,7 +33,7 @@ impl From<String> for HostsFile {
     }
 }
 
-impl From <&str> for HostsFile {
+impl From<&str> for HostsFile {
     fn from(s: &str) -> HostsFile {
         HostsFile::from(s.to_string())
     }
