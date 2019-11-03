@@ -1,6 +1,17 @@
 use std::fmt;
 use std::net::IpAddr;
 
+#[macro_export]
+macro_rules! aliases {
+    ($( $x:expr ), +) => {
+        {
+            Some(vec!($($x),+))
+        }
+    };
+
+    () => (None);
+}
+
 #[derive(Debug, PartialEq, Clone)]
 pub struct Host {
     pub ip: IpAddr,
@@ -16,7 +27,7 @@ impl Host {
             aliases: match aliases {
                 Some(v) => Some(v.iter().map(|s| s.to_string()).collect()),
                 _ => None,
-            }
+            },
         }
     }
 }
@@ -63,20 +74,25 @@ mod tests {
     }
 
     #[test]
+    fn test_aliases() {
+        assert_eq!(aliases!("test"), Some(vec!("test")));
+    }
+
+    #[test]
     fn test_from() {
-        let host = Host::new("127.0.0.1", "localhost", Some(vec!["test"]));
+        let host = Host::new("127.0.0.1", "localhost", aliases!("test"));
         assert_eq!(Host::from("127.0.0.1 localhost test"), host);
 
-        let host = Host::new("127.0.0.1", "localhost", None);
+        let host = Host::new("127.0.0.1", "localhost", aliases!());
         assert_eq!(Host::from("127.0.0.1 localhost"), host)
     }
 
     #[test]
     fn test_display() {
-        let host = Host::new("127.0.0.1", "localhost", Some(vec!["test"]));
+        let host = Host::new("127.0.0.1", "localhost", aliases!("test"));
         assert_eq!(format!("{}", host), "127.0.0.1 localhost test");
 
-        let host = Host::new("127.0.0.1", "localhost", None);
+        let host = Host::new("127.0.0.1", "localhost", aliases!());
         assert_eq!(format!("{}", host), "127.0.0.1 localhost");
     }
 }
