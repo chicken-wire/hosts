@@ -5,7 +5,7 @@ pub struct HostsFile {
     pub hosts: Vec<Host>,
 }
 
-impl From<String> for HostsFile {
+impl From<&str> for HostsFile {
     /// Parses a hosts file.
     ///
     /// Ignores comments.
@@ -19,7 +19,7 @@ impl From<String> for HostsFile {
     ///
     /// hosts::HostsFile::from(hosts);
     /// ```
-    fn from(s: String) -> HostsFile {
+    fn from(s: &str) -> HostsFile {
         let mut hosts: Vec<Host> = vec![];
 
         for line in s.lines() {
@@ -30,12 +30,6 @@ impl From<String> for HostsFile {
             hosts.push(Host::from(line))
         }
         return HostsFile { hosts };
-    }
-}
-
-impl From<&str> for HostsFile {
-    fn from(s: &str) -> HostsFile {
-        HostsFile::from(s.to_string())
     }
 }
 
@@ -52,7 +46,7 @@ impl HostsFile {
     }
 
     pub fn from_file(path: &str) -> HostsFile {
-        HostsFile::from(fs::read_to_string(path).expect("Invalid file path"))
+        HostsFile::from(fs::read_to_string(path).expect("Invalid file path").as_str())
     }
 
     /// Writes hosts to a hosts file.
@@ -82,11 +76,10 @@ mod tests {
     fn test_from() {
         let hosts_str = "127.0.0.1 localhost\n::1 localhost\n127.0.1.1 foxtrot.localdomain foxtrot";
 
-        let lines: Vec<String> = hosts_str.lines().map(|l| l.to_string()).collect();
-        let hosts_file = HostsFile::from(hosts_str.to_string());
+        let hosts_file = HostsFile::from(hosts_str);
 
-        for (i, host) in hosts_file.hosts.iter().enumerate() {
-            assert_eq!(format!("{}", host), lines[i])
+        for (i, line) in hosts_str.lines().enumerate() {
+            assert_eq!(format!("{}", hosts_file.hosts[i]), line)
         }
     }
 }

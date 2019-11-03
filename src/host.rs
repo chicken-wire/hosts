@@ -9,33 +9,30 @@ pub struct Host {
 }
 
 impl Host {
-    pub fn new(ip: &str, fqdn: &str, aliases: Option<Vec<String>>) -> Host {
+    pub fn new(ip: &str, fqdn: &str, aliases: Option<Vec<&str>>) -> Host {
         Host {
             ip: ip.parse().expect("Invalid ip address"),
-            fqdn: fqdn.to_string(),
-            aliases,
+            fqdn: fqdn.into(),
+            aliases: match aliases {
+                Some(v) => Some(v.iter().map(|s| s.to_string()).collect()),
+                _ => None,
+            }
         }
     }
 }
 
-impl From<String> for Host {
-    fn from(s: String) -> Host {
+impl From<&str> for Host {
+    fn from(s: &str) -> Host {
         let values: Vec<&str> = s.split_whitespace().collect();
         Host::new(
             &values.get(0).expect("IP not found"),
             &values.get(1).expect("FQDN not found"),
             match values.get(2..) {
                 Some([]) => None,
-                Some(aliases) => Some(aliases.to_vec().iter().map(|v| v.to_string()).collect()),
+                Some(aliases) => Some(aliases.to_vec()),
                 _ => None,
-            }
+            },
         )
-    }
-}
-
-impl From <&str> for Host {
-    fn from(s: &str) -> Host {
-        Host::from(s.to_string())
     }
 }
 
@@ -67,7 +64,7 @@ mod tests {
 
     #[test]
     fn test_from() {
-        let host = Host::new("127.0.0.1", "localhost", Some(vec!["test".to_string()]));
+        let host = Host::new("127.0.0.1", "localhost", Some(vec!["test"]));
         assert_eq!(Host::from("127.0.0.1 localhost test"), host);
 
         let host = Host::new("127.0.0.1", "localhost", None);
@@ -76,7 +73,7 @@ mod tests {
 
     #[test]
     fn test_display() {
-        let host = Host::new("127.0.0.1", "localhost", Some(vec!["test".to_string()]));
+        let host = Host::new("127.0.0.1", "localhost", Some(vec!["test"]));
         assert_eq!(format!("{}", host), "127.0.0.1 localhost test");
 
         let host = Host::new("127.0.0.1", "localhost", None);
