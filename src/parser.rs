@@ -1,4 +1,5 @@
 use crate::host::Host;
+use std::fmt;
 use std::fs;
 
 pub struct HostsFile {
@@ -39,6 +40,18 @@ impl From<Vec<Host>> for HostsFile {
     }
 }
 
+impl fmt::Display for HostsFile {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut hosts_file = String::new();
+
+        for host in self.hosts.clone() {
+            hosts_file.push_str(&format!("{}\n", host))
+        }
+
+        write!(f, "{}", hosts_file)
+    }
+}
+
 impl HostsFile {
     /// Create empty HostsFile
     pub fn new() -> HostsFile {
@@ -46,7 +59,11 @@ impl HostsFile {
     }
 
     pub fn from_file(path: &str) -> HostsFile {
-        HostsFile::from(fs::read_to_string(path).expect("Invalid file path").as_str())
+        HostsFile::from(
+            fs::read_to_string(path)
+                .expect("Invalid file path")
+                .as_str(),
+        )
     }
 
     /// Writes hosts to a hosts file.
@@ -58,13 +75,7 @@ impl HostsFile {
     /// # std::fs::remove_file("hosts");
     /// ```
     pub fn write(self, path: &str) {
-        let mut hosts_file = String::new();
-
-        for host in self.hosts {
-            hosts_file.push_str(&format!("{}\n", host))
-        }
-
-        fs::write(path, hosts_file).expect("Invalid path");
+        fs::write(path, format!("{}", self)).expect("Invalid path");
     }
 }
 
