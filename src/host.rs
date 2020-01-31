@@ -32,9 +32,9 @@ impl Host {
     }
 }
 
-impl From<&str> for Host {
-    fn from(s: &str) -> Host {
-        let values: Vec<&str> = s.split_whitespace().collect();
+impl<'a, T: Into<&'a str>> From<T> for Host {
+    fn from(s: T) -> Host {
+        let values: Vec<&str> = s.into().split_whitespace().collect();
         Host::new(
             &values.get(0).expect("IP not found"),
             &values.get(1).expect("FQDN not found"),
